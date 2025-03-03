@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Conecta Seu Treino</title>
+    <!-- Leaflet CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.3/leaflet.min.css"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      :root {
+        --azul-pe: #003d7a;
+        --vermelho-pe: #c41e3a;
+        --amarelo-pe: #ffd700;
+        --branco: #ffffff;
+        --cinza-claro: #f5f5f5;
+        --cinza-escuro: #333333;
+      }
+
+      body {
+        background-color: var(--cinza-claro);
+        color: var(--cinza-escuro);
+      }
+
+      .container {
+        max-width: 414px;
+        margin: 0 auto;
+        background: var(--branco);
+        min-height: 100vh;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        position: relative;
+      }
+
+      header {
+        background: var(--azul-pe);
+        color: var(--branco);
+        padding: 15px;
+        text-align: center;
+        position: relative;
+      }
+
+      .header-bar {
+        height: 8px;
+        background: var(--vermelho-pe);
+      }
+
+      .logo {
+        font-size: 22px;
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+
+      .logo span {
+        color: var(--amarelo-pe);
+      }
+
+      .back-button {
+        position: absolute;
+        left: 15px;
+        top: 15px;
+        color: var(--branco);
+        font-size: 24px;
+        display: none;
+      }
+
+      .screens {
+        padding: 20px;
+      }
+
+      .screen {
+        display: none;
+      }
+
+      .screen.active {
+        display: block;
+      }
+
+      /* Tela inicial */
+      .welcome-screen h2 {
+        margin-bottom: 15px;
+        color: var(--azul-pe);
+      }
+
+      .intro-text {
+        margin-bottom: 20px;
+        line-height: 1.5;
+      }
+
+      .feature-list {
+        margin: 20px 0;
+      }
+
+      .feature-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 12px;
+      }
+
+      .feature-item::before {
+        content: "🔹";
+        margin-right: 10px;
+        color: var(--azul-pe);
+      }
+
+      .start-button {
+        display: block;
+        width: 100%;
+        padding: 15px;
+        background: var(--vermelho-pe);
+        color: var(--branco);
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        margin-top: 30px;
+        transition: all 0.3s;
+      }
+
+      .start-button:hover {
+        background: #a01a30;
+      }
+
+      /* Tela de escolha de atividade */
+      .activity-card {
+        background: var(--branco);
+        border: 2px solid var(--cinza-claro);
+        border-radius: 10px;
+        padding: 15px;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .activity-card:hover {
+        border-color: var(--azul-pe);
+        transform: translateY(-2px);
+      }
+
+      .activity-card.selected {
+        border-color: var(--azul-pe);
+        background-color: rgba(0, 61, 122, 0.05);
+      }
+
+      .activity-icon {
+        font-size: 24px;
+        margin-right: 15px;
+        width: 40px;
+        height: 40px;
+        background: var(--azul-pe);
+        color: var(--branco);
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .activity-title {
+        font-weight: bold;
+      }
+
+      .activity-desc {
+        font-size: 14px;
+        color: #666;
+        margin-top: 5px;
+      }
+
+      /* Tela de atividade em andamento */
+      .activity-in-progress {
+        text-align: center;
+        padding-top: 20px;
+      }
+
+      .map-container {
+        width: 100%;
+        height: 250px;
+        background: #ddd;
+        margin: 20px 0;
+        border-radius: 10px;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .map-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .progress-info {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 30px;
+      }
+
+      .progress-item {
+        text-align: center;
+        flex: 1;
+      }
+
+      .progress-value {
+        font-size: 24px;
+        font-weight: bold;
+        color: var(--azul-pe);
+      }
+
+      .progress-label {
+        font-size: 14px;
+        color: #666;
+      }
+
+      .stop-button {
+        background: var(--vermelho-pe);
+        color: var(--branco);
+        border: none;
+        border-radius: 5px;
+        padding: 15px 25px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      /* Tela de resumo */
+      .summary-screen {
+        text-align: center;
+      }
+
+      .summary-title {
+        color: var(--azul-pe);
+        margin-bottom: 5px;
+      }
+
+      .summary-subtitle {
+        color: #666;
+        margin-bottom: 20px;
+      }
+
+      .reward-container {
+        background: var(--amarelo-pe);
+        padding: 20px;
+        border-radius: 10px;
+        margin: 20px 0;
+        color: var(--cinza-escuro);
+      }
+
+      .reward-amount {
+        font-size: 32px;
+        font-weight: bold;
+      }
+
+      .reward-label {
+        margin-top: 5px;
+      }
+
+      .summary-stats {
+        display: flex;
+        justify-content: space-around;
+        margin: 20px 0;
+      }
+
+      .stat-item {
+        text-align: center;
+      }
+
+      .stat-value {
+        font-size: 24px;
+        font-weight: bold;
+        color: var(--azul-pe);
+      }
+
+      .stat-label {
+        font-size: 14px;
+        color: #666;
+      }
+
+      .action-buttons {
+        display: flex;
+        gap: 10px;
+        margin-top: 30px;
+      }
+
+      .action-buttons button {
+        flex: 1;
+        padding: 15px;
+        border: none;
+        border-radius: 5px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      .action-buttons .primary-button {
+        background: var(--azul-pe);
+        color: var(--branco);
+      }
+
+      .action-buttons .secondary-button {
+        background: var(--cinza-claro);
+        color: var(--cinza-escuro);
+      }
+
+      /* Tela de ranking */
+      .ranking-tabs {
+        display: flex;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #ddd;
+      }
+
+      .ranking-tab {
+        flex: 1;
+        text-align: center;
+        padding: 10px;
+        cursor: pointer;
+      }
+
+      .ranking-tab.active {
+        color: var(--azul-pe);
+        border-bottom: 2px solid var(--azul-pe);
+        font-weight: bold;
+      }
+
+      .user-ranking {
+        margin-bottom: 30px;
+        padding: 15px;
+        background: rgba(0, 61, 122, 0.1);
+        border-radius: 10px;
+      }
+
+      .ranking-list {
+        list-style: none;
+      }
+
+      .ranking-item {
+        display: flex;
+        align-items: center;
+        padding: 12px 0;
+        border-bottom: 1px solid #eee;
+      }
+
+      .ranking-position {
+        width: 30px;
+        text-align: center;
+        font-weight: bold;
+      }
+
+      .top-ranking {
+        color: var(--vermelho-pe);
+      }
+
+      .ranking-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #ddd;
+        margin: 0 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        color: #666;
+      }
+
+      .ranking-user-info {
+        flex-grow: 1;
+      }
+
+      .ranking-name {
+        font-weight: bold;
+      }
+
+      .ranking-stats {
+        font-size: 12px;
+        color: #666;
+      }
+
+      .ranking-points {
+        font-weight: bold;
+        color: var(--azul-pe);
+      }
+
+      /* Footer navigation */
+      .nav-footer {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        max-width: 414px;
+        height: 60px;
+        background: var(--branco);
+        display: flex;
+        border-top: 1px solid #eee;
+      }
+
+      .nav-item {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: #999;
+        font-size: 10px;
+        cursor: pointer;
+      }
+
+      .nav-item.active {
+        color: var(--azul-pe);
+      }
+
+      .nav-icon {
+        font-size: 20px;
+        margin-bottom: 5px;
+      }
+
+      /* Animações */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      .screen.active {
+        animation: fadeIn 0.5s;
+      }
+
+      /* Parque da Jaqueira Label */
+      .park-label {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background: rgba(255, 255, 255, 0.8);
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-size: 12px;
+        font-weight: bold;
+      }
+      .user-marker {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: var(--vermelho-pe);
+        border: 3px solid var(--branco);
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <div class="header-bar"></div>
+        <div class="back-button">←</div>
+        <div class="logo">Conecta <span>Seu Treino</span></div>
+        <div class="subtitle">Transforme passos em recompensas</div>
+      </header>
+
+      <div class="screens">
+        <!-- Tela inicial -->
+        <div class="screen welcome-screen active" id="welcome-screen">
+          <h2>Bem-vindo ao Conecta Seu Treino!</h2>
+          <p class="intro-text">
+            Transforme seus passos em recompensas! Caminhe, corra ou pedale e
+            ganhe Capibas, a moeda digital do Recife.
+          </p>
+
+          <div class="feature-list">
+            <div class="feature-item">
+              Monitore suas atividades automaticamente via GPS
+            </div>
+            <div class="feature-item">
+              Cumpra desafios em áreas específicas para ganhar Capibas
+            </div>
+            <div class="feature-item">
+              Troque suas moedas por benefícios reais no Recife
+            </div>
+            <div class="feature-item">
+              Engaje-se com a cidade e incentive um estilo de vida ativo
+            </div>
+          </div>
+
+          <button class="start-button" id="start-button">Começar Agora</button>
+        </div>
+
+        <!-- Tela de escolha de atividade -->
+        <div
+          class="screen activity-selection-screen"
+          id="activity-selection-screen"
+        >
+          <h2>Escolha sua atividade</h2>
+          <p class="intro-text">
+            Selecione o tipo de exercício que você vai praticar hoje no Parque
+            da Jaqueira:
+          </p>
+
+          <div class="activity-card" data-activity="caminhada">
+            <div class="activity-icon">🚶</div>
+            <div class="activity-info">
+              <div class="activity-title">Caminhada</div>
+              <div class="activity-desc">
+                Ritmo tranquilo, ideal para iniciantes
+              </div>
+            </div>
+          </div>
+
+          <div class="activity-card" data-activity="corrida">
+            <div class="activity-icon">🏃</div>
+            <div class="activity-info">
+              <div class="activity-title">Corrida</div>
+              <div class="activity-desc">
+                Maior intensidade para quem busca desafio
+              </div>
+            </div>
+          </div>
+
+          <div class="activity-card" data-activity="bicicleta">
+            <div class="activity-icon">🚴</div>
+            <div class="activity-info">
+              <div class="activity-title">Bicicleta</div>
+              <div class="activity-desc">
+                Explore mais caminhos com menor impacto
+              </div>
+            </div>
+          </div>
+
+          <button class="start-button" id="start-activity-button" disabled>
+            Iniciar Atividade
+          </button>
+        </div>
+
+        <!-- Tela de atividade em andamento -->
+        <div
+          class="screen activity-in-progress"
+          id="activity-in-progress-screen"
+        >
+          <h2 id="activity-title">Caminhada em andamento</h2>
+
+          <div class="map-container">
+            <div id="map" style="width: 100%; height: 100%"></div>
+          </div>
+
+          <div class="progress-info">
+            <div class="progress-item">
+              <div class="progress-value" id="time-value">00:00</div>
+              <div class="progress-label">Tempo</div>
+            </div>
+            <div class="progress-item">
+              <div class="progress-value" id="distance-value">0.0</div>
+              <div class="progress-label">Distância (km)</div>
+            </div>
+            <div class="progress-item">
+              <div class="progress-value" id="capibas-value">0</div>
+              <div class="progress-label">Capibas</div>
+            </div>
+          </div>
+
+          <button class="stop-button" id="stop-button">
+            Finalizar Atividade
+          </button>
+        </div>
+
+        <!-- Tela de resumo -->
+        <div class="screen summary-screen" id="summary-screen">
+          <h2 class="summary-title">Parabéns!</h2>
+          <p class="summary-subtitle">
+            Você completou sua atividade no Parque da Jaqueira
+          </p>
+
+          <div class="reward-container">
+            <div class="reward-amount" id="summary-capibas">120</div>
+            <div class="reward-label">Capibas ganhas</div>
+          </div>
+
+          <div class="summary-stats">
+            <div class="stat-item">
+              <div class="stat-value" id="summary-time">18:32</div>
+              <div class="stat-label">Tempo</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value" id="summary-distance">2.4</div>
+              <div class="stat-label">Km</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value" id="summary-calories">187</div>
+              <div class="stat-label">Calorias</div>
+            </div>
+          </div>
+
+          <div class="action-buttons">
+            <button class="secondary-button" id="home-button">Início</button>
+            <button class="primary-button" id="ranking-button">
+              Ver Ranking
+            </button>
+          </div>
+        </div>
+
+        <!-- Tela de ranking -->
+        <div class="screen ranking-screen" id="ranking-screen">
+          <h2>Ranking de Atividades</h2>
+
+          <div class="ranking-tabs">
+            <div class="ranking-tab active" data-period="week">Semanal</div>
+            <div class="ranking-tab" data-period="month">Mensal</div>
+          </div>
+
+          <div class="user-ranking">
+            <div class="ranking-item">
+              <div class="ranking-position">7</div>
+              <div class="ranking-avatar">Você</div>
+              <div class="ranking-user-info">
+                <div class="ranking-name">Sua posição</div>
+                <div class="ranking-stats">5 atividades esta semana</div>
+              </div>
+              <div class="ranking-points">920</div>
+            </div>
+          </div>
+
+          <ul class="ranking-list">
+            <li class="ranking-item">
+              <div class="ranking-position top-ranking">1</div>
+              <div class="ranking-avatar">MC</div>
+              <div class="ranking-user-info">
+                <div class="ranking-name">Maria C.</div>
+                <div class="ranking-stats">12 atividades esta semana</div>
+              </div>
+              <div class="ranking-points">2430</div>
+            </li>
+            <li class="ranking-item">
+              <div class="ranking-position top-ranking">2</div>
+              <div class="ranking-avatar">JP</div>
+              <div class="ranking-user-info">
+                <div class="ranking-name">João P.</div>
+                <div class="ranking-stats">9 atividades esta semana</div>
+              </div>
+              <div class="ranking-points">1870</div>
+            </li>
+            <li class="ranking-item">
+              <div class="ranking-position top-ranking">3</div>
+              <div class="ranking-avatar">AS</div>
+              <div class="ranking-user-info">
+                <div class="ranking-name">Ana S.</div>
+                <div class="ranking-stats">8 atividades esta semana</div>
+              </div>
+              <div class="ranking-points">1640</div>
+            </li>
+            <li class="ranking-item">
+              <div class="ranking-position">4</div>
+              <div class="ranking-avatar">PL</div>
+              <div class="ranking-user-info">
+                <div class="ranking-name">Pedro L.</div>
+                <div class="ranking-stats">7 atividades esta semana</div>
+              </div>
+              <div class="ranking-points">1420</div>
+            </li>
+            <li class="ranking-item">
+              <div class="ranking-position">5</div>
+              <div class="ranking-avatar">LM</div>
+              <div class="ranking-user-info">
+                <div class="ranking-name">Luiza M.</div>
+                <div class="ranking-stats">6 atividades esta semana</div>
+              </div>
+              <div class="ranking-points">1210</div>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Footer navigation -->
+      <div class="nav-footer" id="nav-footer" style="display: none">
+        <div class="nav-item active" data-screen="home">
+          <div class="nav-icon">🏠</div>
+          <div>Início</div>
+        </div>
+        <div class="nav-item" data-screen="activities">
+          <div class="nav-icon">🏃</div>
+          <div>Atividades</div>
+        </div>
+        <div class="nav-item" data-screen="rewards">
+          <div class="nav-icon">🏆</div>
+          <div>Recompensas</div>
+        </div>
+        <div class="nav-item" data-screen="profile">
+          <div class="nav-icon">👤</div>
+          <div>Perfil</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.3/leaflet.min.js"></script>
+
+    <script>
+      // Elementos da interface
+      const screens = {
+        welcome: document.getElementById("welcome-screen"),
+        activitySelection: document.getElementById("activity-selection-screen"),
+        activityInProgress: document.getElementById(
+          "activity-in-progress-screen"
+        ),
+        summary: document.getElementById("summary-screen"),
+        ranking: document.getElementById("ranking-screen"),
+      };
+
+      const buttons = {
+        start: document.getElementById("start-button"),
+        startActivity: document.getElementById("start-activity-button"),
+        stop: document.getElementById("stop-button"),
+        home: document.getElementById("home-button"),
+        ranking: document.getElementById("ranking-button"),
+      };
+
+      const backButton = document.querySelector(".back-button");
+      const navFooter = document.getElementById("nav-footer");
+      const activityCards = document.querySelectorAll(".activity-card");
+
+      // Elementos de progresso
+      const timeValue = document.getElementById("time-value");
+      const distanceValue = document.getElementById("distance-value");
+      const capibasValue = document.getElementById("capibas-value");
+      const activityTitle = document.getElementById("activity-title");
+
+      // Elementos de resumo
+      const summaryCapibas = document.getElementById("summary-capibas");
+      const summaryTime = document.getElementById("summary-time");
+      const summaryDistance = document.getElementById("summary-distance");
+      const summaryCalories = document.getElementById("summary-calories");
+
+      // Variáveis de controle
+      let selectedActivity = null;
+      let timerInterval = null;
+      let seconds = 0;
+      let distance = 0;
+      let capibas = 0;
+      let map = null;
+      let userMarker = null;
+      let routePath = null;
+      let currentPointIndex = 0;
+      let simulationInterval;
+
+      // Coordenadas do Parque da Jaqueira em Recife
+      const parqueJaqueiraCenter = [-8.036931, -34.904897];
+
+      // Coordenadas do circuito do Parque da Jaqueira (aproximado)
+      // Este é um circuito fictício baseado no formato real do parque
+      const circuitoJaqueira = [
+        [-8.036317, -34.904145], // Entrada oeste
+        [-8.036696, -34.903788],
+        [-8.036927, -34.903667],
+        [-8.037031, -34.903625],
+        [-8.037198, -34.903621], // Parte leste
+        [-8.037345, -34.903637],
+        [-8.037484, -34.903796],
+        [-8.037828, -34.904002],
+        [-8.037983, -34.904153],
+        [-8.038098, -34.904579],
+        [-8.038095, -34.904716],
+        [-8.037963, -34.90485],
+        [-8.037822, -34.904873],
+        [-8.03774, -34.904847],
+        [-8.037405, -34.904511],
+        [-8.037299, -34.904464],
+        [-8.037162, -34.904477],
+        [-8.036609, -34.905047],
+        [-8.036617, -34.905227],
+        [-8.03699, -34.905575],
+        [-8.037013, -34.90568],
+        [-8.036971, -34.90575],
+        [-8.036712, -34.905937],
+        [-8.03648, -34.906058],
+        [-8.036415, -34.906066],
+        [-8.036364, -34.906034],
+        [-8.036218, -34.905831],
+        [-8.036044, -34.905582],
+        [-8.03588, -34.905351],
+        [-8.035651, -34.905027],
+        [-8.035619, -34.904879],
+        [-8.03566, -34.904758],
+        [-8.035768, -34.904631],
+        [-8.03606, -34.904377],
+        [-8.036317, -34.904145], // Retorno ao início
+      ];
+
+      // Inicializar mapa
+      function initMap() {
+        map = L.map("map").setView(parqueJaqueiraCenter, 17);
+
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          attribution:
+            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        }).addTo(map);
+
+        // Desenhar o circuito no mapa
+        routePath = L.polyline(circuitoJaqueira, {
+          color: "#003d7a",
+          weight: 5,
+          opacity: 0.7,
+        }).addTo(map);
+
+        // Adicionar marcador para o usuário
+        const userIcon = L.divIcon({
+          className: "user-marker",
+          iconSize: [20, 20],
+        });
+
+        userMarker = L.marker(circuitoJaqueira[0], {
+          icon: userIcon,
+        }).addTo(map);
+      }
+
+      // Função para calcular a distância entre dois pontos em km
+      function calculateDistance(point1, point2) {
+        const lat1 = point1[0];
+        const lon1 = point1[1];
+        const lat2 = point2[0];
+        const lon2 = point2[1];
+
+        const R = 6371; // Raio da Terra em km
+        const dLat = ((lat2 - lat1) * Math.PI) / 180;
+        const dLon = ((lon2 - lon1) * Math.PI) / 180;
+        const a =
+          Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+          Math.cos((lat1 * Math.PI) / 180) *
+            Math.cos((lat2 * Math.PI) / 180) *
+            Math.sin(dLon / 2) *
+            Math.sin(dLon / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c;
+      }
+
+      // Função para mover o marcador do usuário ao longo do circuito
+      function moveUserMarker() {
+        if (currentPointIndex >= circuitoJaqueira.length - 1) {
+          currentPointIndex = 0; // Reiniciar o circuito
+        }
+
+        const currentPoint = circuitoJaqueira[currentPointIndex];
+        const nextPoint = circuitoJaqueira[currentPointIndex + 1];
+
+        // Mover o marcador para o próximo ponto
+        userMarker.setLatLng(nextPoint);
+
+        // Calcular distância percorrida
+        const segmentDistance = calculateDistance(currentPoint, nextPoint);
+        distance += segmentDistance;
+        distanceValue.textContent = distance.toFixed(1);
+
+        // Calcular Capibas com base na distância
+        capibas = Math.floor(distance * 50);
+        capibasValue.textContent = capibas;
+
+        // Centralizar o mapa no marcador
+        map.panTo(nextPoint);
+
+        // Avançar para o próximo ponto
+        currentPointIndex++;
+      }
+
+      // Função para mostrar uma tela específica
+      function showScreen(screenId) {
+        Object.values(screens).forEach((screen) => {
+          screen.classList.remove("active");
+        });
+
+        screens[screenId].classList.add("active");
+
+        // Mostrar/esconder botão de voltar e navbar conforme a tela
+        if (screenId === "welcome") {
+          backButton.style.display = "none";
+          navFooter.style.display = "none";
+        } else {
+          backButton.style.display = "block";
+
+          if (screenId === "activityInProgress") {
+            navFooter.style.display = "none";
+          } else if (screenId !== "welcome") {
+            navFooter.style.display = "flex";
+          }
+        }
+      }
+
+      // Formatar tempo (MM:SS)
+      function formatTime(totalSeconds) {
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds % 60;
+        return `${minutes.toString().padStart(2, "0")}:${seconds
+          .toString()
+          .padStart(2, "0")}`;
+      }
+
+      // Iniciar timer da atividade
+      function startTimer() {
+        // Inicializar o mapa se não estiver inicializado
+        if (!map) {
+          initMap();
+        }
+
+        timerInterval = setInterval(() => {
+          seconds++;
+          timeValue.textContent = formatTime(seconds);
+        }, 1000);
+
+        // Iniciar movimento no mapa
+        simulationInterval = setInterval(moveUserMarker, 1000);
+      }
+      // Parar timer
+      function stopTimer() {
+        clearInterval(timerInterval);
+        clearInterval(simulationInterval);
+
+        // Resetar posição do marcador
+        if (userMarker) {
+          currentPointIndex = 0;
+          userMarker.setLatLng(circuitoJaqueira[0]);
+        }
+      }
+
+      // Configuração de eventos
+      buttons.start.addEventListener("click", () => {
+        showScreen("activitySelection");
+      });
+
+      activityCards.forEach((card) => {
+        card.addEventListener("click", () => {
+          // Remover seleção anterior
+          activityCards.forEach((c) => c.classList.remove("selected"));
+
+          // Marcar o selecionado
+          card.classList.add("selected");
+          selectedActivity = card.getAttribute("data-activity");
+
+          // Habilitar o botão de iniciar
+          buttons.startActivity.removeAttribute("disabled");
+        });
+      });
+
+      buttons.startActivity.addEventListener("click", () => {
+        showScreen("activityInProgress");
+
+        // Atualizar título conforme a atividade selecionada
+        const activityNames = {
+          caminhada: "Caminhada",
+          corrida: "Corrida",
+          bicicleta: "Pedalada",
+        };
+
+        activityTitle.textContent = `${activityNames[selectedActivity]} em andamento`;
+
+        // Iniciar timer e simulação
+        startTimer();
+      });
+
+      buttons.stop.addEventListener("click", () => {
+        stopTimer();
+
+        // Atualizar tela de resumo
+        summaryCapibas.textContent = capibas;
+        summaryTime.textContent = formatTime(seconds);
+        summaryDistance.textContent = distance.toFixed(1);
+
+        // Calcular calorias fictícias
+        const calorieFactors = {
+          caminhada: 4.5,
+          corrida: 8.5,
+          bicicleta: 6.5,
+        };
+
+        const factor = calorieFactors[selectedActivity] || 5;
+        const calories = Math.floor(distance * factor * 10);
+        summaryCalories.textContent = calories;
+
+        showScreen("summary");
+      });
+
+      buttons.home.addEventListener("click", () => {
+        // Resetar valores
+        seconds = 0;
+        distance = 0;
+        capibas = 0;
+        timeValue.textContent = "00:00";
+        distanceValue.textContent = "0.0";
+        capibasValue.textContent = "0";
+
+        if (map) {
+          currentPointIndex = 0;
+          userMarker.setLatLng(circuitoJaqueira[0]);
+          map.panTo(circuitoJaqueira[0]);
+        }
+
+        showScreen("welcome");
+      });
+
+      buttons.ranking.addEventListener("click", () => {
+        showScreen("ranking");
+      });
+
+      backButton.addEventListener("click", () => {
+        if (screens.activitySelection.classList.contains("active")) {
+          showScreen("welcome");
+        } else if (screens.activityInProgress.classList.contains("active")) {
+          stopTimer();
+          showScreen("activitySelection");
+        } else if (screens.summary.classList.contains("active")) {
+          showScreen("welcome");
+        } else if (screens.ranking.classList.contains("active")) {
+          showScreen("summary");
+        }
+      });
+
+      // Navegação de rodapé
+      const navItems = document.querySelectorAll(".nav-item");
+      navItems.forEach((item) => {
+        item.addEventListener("click", () => {
+          // Remover classe ativa de todos os itens
+          navItems.forEach((i) => i.classList.remove("active"));
+
+          // Adicionar classe ativa ao item clicado
+          item.classList.add("active");
+
+          // Mostrar tela correspondente (apenas home implementado)
+          const screen = item.getAttribute("data-screen");
+          if (screen === "home") {
+            showScreen("welcome");
+          }
+        });
+      });
+
+      // Abas de ranking
+      const rankingTabs = document.querySelectorAll(".ranking-tab");
+      rankingTabs.forEach((tab) => {
+        tab.addEventListener("click", () => {
+          rankingTabs.forEach((t) => t.classList.remove("active"));
+          tab.classList.add("active");
+          // Aqui poderia carregar dados diferentes para cada período
+        });
+      });
+    </script>
+  </body>
+</html>
