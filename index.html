@@ -453,6 +453,287 @@
         border: 3px solid var(--branco);
         box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
       }
+
+      /* Estilos para o histórico de atividades */
+      .activity-stats {
+        display: flex;
+        justify-content: space-between;
+        margin: 20px 0;
+      }
+
+      .stat-card {
+        background: var(--branco);
+        border-radius: 10px;
+        padding: 15px;
+        text-align: center;
+        flex: 1;
+        margin: 0 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .stat-value {
+        font-size: 20px;
+        font-weight: bold;
+        color: var(--azul-pe);
+      }
+
+      .stat-label {
+        font-size: 12px;
+        color: #666;
+        margin-top: 5px;
+      }
+
+      .history-filter {
+        margin: 20px 0;
+      }
+
+      .history-filter select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background: var(--branco);
+      }
+
+      .activity-history-list {
+        margin-top: 20px;
+      }
+
+      .activity-history-item {
+        margin-bottom: 20px;
+      }
+
+      .activity-date {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 5px;
+      }
+
+      .activity-history-detail {
+        background: var(--branco);
+        border-radius: 10px;
+        padding: 15px;
+        display: flex;
+        align-items: center;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+      }
+
+      .activity-history-icon {
+        width: 40px;
+        height: 40px;
+        background: var(--azul-pe);
+        color: var(--branco);
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-right: 15px;
+        font-size: 20px;
+      }
+
+      .activity-history-title {
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+
+      .activity-history-stats {
+        font-size: 14px;
+        color: #666;
+      }
+
+      /* Estilos para perfil */
+      .profile-header {
+        text-align: center;
+        padding: 20px 0;
+        margin-bottom: 20px;
+      }
+
+      .profile-avatar {
+        width: 80px;
+        height: 80px;
+        background: var(--azul-pe);
+        color: var(--branco);
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 28px;
+        font-weight: bold;
+        margin: 0 auto 15px;
+      }
+
+      .profile-name {
+        font-size: 22px;
+        margin-bottom: 5px;
+      }
+
+      .profile-level {
+        color: var(--azul-pe);
+        font-size: 14px;
+      }
+
+      .profile-section {
+        background: var(--branco);
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+      }
+
+      .profile-section h3 {
+        color: var(--azul-pe);
+        margin-bottom: 15px;
+        font-size: 18px;
+      }
+
+      .profile-data-item {
+        display: flex;
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #eee;
+      }
+
+      .profile-data-label {
+        flex: 1;
+        color: #666;
+      }
+
+      .profile-data-value {
+        flex: 2;
+        font-weight: 500;
+      }
+
+      .edit-profile-button {
+        background: var(--azul-pe);
+        color: var(--branco);
+        border: none;
+        border-radius: 5px;
+        padding: 10px;
+        width: 100%;
+        margin-top: 15px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      .goal-item {
+        margin-bottom: 15px;
+      }
+
+      .goal-progress {
+        height: 10px;
+        background: #eee;
+        border-radius: 5px;
+        margin-bottom: 5px;
+        overflow: hidden;
+      }
+
+      .goal-progress-bar {
+        height: 100%;
+        background: var(--vermelho-pe);
+        border-radius: 5px;
+      }
+
+      .goal-title {
+        font-weight: 500;
+      }
+
+      .goal-status {
+        font-size: 14px;
+        color: #666;
+      }
+
+      /* Estilos para recompensas */
+      .user-capibas {
+        background: var(--amarelo-pe);
+        border-radius: 10px;
+        padding: 20px;
+        margin: 20px 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: var(--cinza-escuro);
+      }
+
+      .capibas-icon {
+        font-size: 28px;
+        margin-bottom: 10px;
+      }
+
+      .capibas-balance {
+        font-size: 32px;
+        font-weight: bold;
+      }
+
+      .rewards-tabs {
+        display: flex;
+        margin: 20px 0;
+        border-bottom: 1px solid #ddd;
+      }
+
+      .reward-tab {
+        flex: 1;
+        text-align: center;
+        padding: 10px;
+        cursor: pointer;
+      }
+
+      .reward-tab.active {
+        color: var(--azul-pe);
+        border-bottom: 2px solid var(--azul-pe);
+        font-weight: bold;
+      }
+
+      .reward-card {
+        background: var(--branco);
+        border-radius: 10px;
+        padding: 15px;
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+      }
+
+      .reward-image {
+        width: 50px;
+        height: 50px;
+        border-radius: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 24px;
+        color: var(--branco);
+        margin-right: 15px;
+      }
+
+      .reward-info {
+        flex-grow: 1;
+      }
+
+      .reward-title {
+        font-weight: bold;
+        margin-bottom: 3px;
+      }
+
+      .reward-description {
+        font-size: 12px;
+        color: #666;
+        margin-bottom: 5px;
+      }
+
+      .reward-price {
+        font-weight: bold;
+        color: var(--azul-pe);
+      }
+
+      .reward-button {
+        background: var(--azul-pe);
+        color: var(--branco);
+        border: none;
+        border-radius: 5px;
+        padding: 8px 12px;
+        font-weight: bold;
+        cursor: pointer;
+      }
     </style>
   </head>
   <body>
@@ -672,6 +953,247 @@
             </li>
           </ul>
         </div>
+
+        <!-- Tela de histórico de atividades -->
+        <div
+          class="screen activities-history-screen"
+          id="activities-history-screen"
+        >
+          <h2>Seu Histórico de Atividades</h2>
+
+          <div class="activity-stats">
+            <div class="stat-card">
+              <div class="stat-value">27</div>
+              <div class="stat-label">Total de Atividades</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value">84.3</div>
+              <div class="stat-label">Km Percorridos</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value">4310</div>
+              <div class="stat-label">Capibas Ganhas</div>
+            </div>
+          </div>
+
+          <div class="history-filter">
+            <select id="activity-type-filter">
+              <option value="all">Todas as atividades</option>
+              <option value="caminhada">Caminhada</option>
+              <option value="corrida">Corrida</option>
+              <option value="bicicleta">Bicicleta</option>
+            </select>
+          </div>
+
+          <div class="activity-history-list">
+            <div class="activity-history-item">
+              <div class="activity-date">Hoje, 15:30</div>
+              <div class="activity-history-detail">
+                <div class="activity-history-icon">🏃</div>
+                <div class="activity-history-info">
+                  <div class="activity-history-title">
+                    Corrida no Parque da Jaqueira
+                  </div>
+                  <div class="activity-history-stats">
+                    2.4 km • 18:32 min • 120 capibas
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="activity-history-item">
+              <div class="activity-date">Ontem, 17:45</div>
+              <div class="activity-history-detail">
+                <div class="activity-history-icon">🚶</div>
+                <div class="activity-history-info">
+                  <div class="activity-history-title">
+                    Caminhada no Parque da Jaqueira
+                  </div>
+                  <div class="activity-history-stats">
+                    3.1 km • 42:15 min • 155 capibas
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="activity-history-item">
+              <div class="activity-date">Sábado, 08:20</div>
+              <div class="activity-history-detail">
+                <div class="activity-history-icon">🚴</div>
+                <div class="activity-history-info">
+                  <div class="activity-history-title">
+                    Pedalada no Parque da Jaqueira
+                  </div>
+                  <div class="activity-history-stats">
+                    5.7 km • 24:40 min • 285 capibas
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="activity-history-item">
+              <div class="activity-date">15/02, 16:10</div>
+              <div class="activity-history-detail">
+                <div class="activity-history-icon">🏃</div>
+                <div class="activity-history-info">
+                  <div class="activity-history-title">
+                    Corrida no Parque da Jaqueira
+                  </div>
+                  <div class="activity-history-stats">
+                    2.8 km • 21:05 min • 140 capibas
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tela de perfil -->
+        <div class="screen profile-screen" id="profile-screen">
+          <div class="profile-header">
+            <div class="profile-avatar">JD</div>
+            <h2 class="profile-name">João da Silva</h2>
+            <div class="profile-level">Nível 8 - Explorador Ativo</div>
+          </div>
+
+          <div class="profile-stats">
+            <div class="stat-card">
+              <div class="stat-value">5310</div>
+              <div class="stat-label">Capibas Totais</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value">1270</div>
+              <div class="stat-label">Capibas Disponíveis</div>
+            </div>
+          </div>
+
+          <div class="profile-section">
+            <h3>Dados Pessoais</h3>
+            <div class="profile-data">
+              <div class="profile-data-item">
+                <div class="profile-data-label">Email</div>
+                <div class="profile-data-value">joao.silva@email.com</div>
+              </div>
+              <div class="profile-data-item">
+                <div class="profile-data-label">Telefone</div>
+                <div class="profile-data-value">(81) 98765-4321</div>
+              </div>
+              <div class="profile-data-item">
+                <div class="profile-data-label">Data de Nascimento</div>
+                <div class="profile-data-value">15/05/1990</div>
+              </div>
+            </div>
+            <button class="edit-profile-button">Editar Perfil</button>
+          </div>
+
+          <div class="profile-section">
+            <h3>Meus Objetivos</h3>
+            <div class="goal-item">
+              <div class="goal-progress">
+                <div class="goal-progress-bar" style="width: 70%"></div>
+              </div>
+              <div class="goal-info">
+                <div class="goal-title">Visitar 3 parques diferentes</div>
+                <div class="goal-status">2/3 completos</div>
+              </div>
+            </div>
+            <div class="goal-item">
+              <div class="goal-progress">
+                <div class="goal-progress-bar" style="width: 45%"></div>
+              </div>
+              <div class="goal-info">
+                <div class="goal-title">Acumular 10.000 Capibas</div>
+                <div class="goal-status">5310/10000 completos</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tela de recompensas -->
+        <div class="screen rewards-screen" id="rewards-screen">
+          <h2>Troque suas Capibas</h2>
+          <div class="user-capibas">
+            <div class="capibas-icon">🪙</div>
+            <div class="capibas-balance">1270</div>
+            <div class="capibas-label">Capibas disponíveis</div>
+          </div>
+
+          <div class="rewards-tabs">
+            <div class="reward-tab active" data-tab="tickets">Ingressos</div>
+            <div class="reward-tab" data-tab="food">Alimentação</div>
+            <div class="reward-tab" data-tab="services">Serviços</div>
+          </div>
+
+          <div class="rewards-list">
+            <div class="reward-card">
+              <div
+                class="reward-image"
+                style="background-color: var(--azul-pe)"
+              >
+                🎭
+              </div>
+              <div class="reward-info">
+                <div class="reward-title">Ingresso Teatro Santa Isabel</div>
+                <div class="reward-description">
+                  Válido para qualquer espetáculo em cartaz
+                </div>
+                <div class="reward-price">400 capibas</div>
+              </div>
+              <button class="reward-button">Resgatar</button>
+            </div>
+
+            <div class="reward-card">
+              <div
+                class="reward-image"
+                style="background-color: var(--azul-pe)"
+              >
+                🏊
+              </div>
+              <div class="reward-info">
+                <div class="reward-title">Entrada Parque Aquático</div>
+                <div class="reward-description">
+                  Passe de dia inteiro para o Veneza Water Park
+                </div>
+                <div class="reward-price">850 capibas</div>
+              </div>
+              <button class="reward-button">Resgatar</button>
+            </div>
+
+            <div class="reward-card">
+              <div
+                class="reward-image"
+                style="background-color: var(--azul-pe)"
+              >
+                🎬
+              </div>
+              <div class="reward-info">
+                <div class="reward-title">Cinema Recife</div>
+                <div class="reward-description">
+                  Ingresso para qualquer sessão
+                </div>
+                <div class="reward-price">350 capibas</div>
+              </div>
+              <button class="reward-button">Resgatar</button>
+            </div>
+
+            <div class="reward-card">
+              <div
+                class="reward-image"
+                style="background-color: var(--azul-pe)"
+              >
+                🏛️
+              </div>
+              <div class="reward-info">
+                <div class="reward-title">Museu Cais do Sertão</div>
+                <div class="reward-description">
+                  Entrada para visitação completa
+                </div>
+                <div class="reward-price">250 capibas</div>
+              </div>
+              <button class="reward-button">Resgatar</button>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Footer navigation -->
@@ -708,6 +1230,9 @@
         ),
         summary: document.getElementById("summary-screen"),
         ranking: document.getElementById("ranking-screen"),
+        activities: document.getElementById("activities-history-screen"),
+        profile: document.getElementById("profile-screen"),
+        rewards: document.getElementById("rewards-screen"),
       };
 
       const buttons = {
@@ -1025,11 +1550,27 @@
           // Adicionar classe ativa ao item clicado
           item.classList.add("active");
 
-          // Mostrar tela correspondente (apenas home implementado)
+          // Mostrar tela correspondente
           const screen = item.getAttribute("data-screen");
           if (screen === "home") {
             showScreen("welcome");
+          } else if (screen === "activities") {
+            showScreen("activities");
+          } else if (screen === "profile") {
+            showScreen("profile");
+          } else if (screen === "rewards") {
+            showScreen("rewards");
           }
+        });
+      });
+
+      // Abas da tela de recompensas
+      const rewardTabs = document.querySelectorAll(".reward-tab");
+      rewardTabs.forEach((tab) => {
+        tab.addEventListener("click", () => {
+          rewardTabs.forEach((t) => t.classList.remove("active"));
+          tab.classList.add("active");
+          // Aqui poderia carregar recompensas diferentes para cada categoria
         });
       });
 
