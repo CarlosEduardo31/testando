@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Postagens do Instagram por Hashtag</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+      }
+      input,
+      button {
+        margin: 10px;
+        padding: 10px;
+        font-size: 16px;
+      }
+      button {
+        cursor: pointer;
+      }
+      #result {
+        margin-top: 20px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .post {
+        margin: 10px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        width: 200px;
+      }
+      img {
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Postagens Recentes por Hashtag</h2>
+    <input
+      type="text"
+      id="hashtagInput"
+      placeholder="Digite a hashtag (sem #)"
+    />
+    <button onclick="buscarHashtag()">Buscar</button>
+    <div id="result"></div>
+
+    <script>
+      const ACCESS_TOKEN = "SEU_ACCESS_TOKEN"; // Substitua pelo seu token de acesso
+      const USER_ID = "SEU_USER_ID"; // Substitua pelo seu ID de usuário do Instagram
+
+      function buscarHashtag() {
+        const hashtag = document.getElementById("hashtagInput").value;
+        if (!hashtag) {
+          alert("Digite uma hashtag!");
+          return;
+        }
+
+        // Buscar ID da hashtag
+        fetch(
+          `https://graph.facebook.com/v19.0/ig_hashtag_search?user_id=${USER_ID}&q=${hashtag}&access_token=${ACCESS_TOKEN}`
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            if (!data.data || data.data.length === 0) {
+              alert("Hashtag não encontrada!");
+              return;
+            }
+            const hashtagId = data.data[0].id;
+            buscarPosts(hashtagId);
+          })
+          .catch((error) =>
+            console.error("Erro ao buscar ID da hashtag:", error)
+          );
+      }
+
+      function buscarPosts(hashtagId) {
+        fetch(
+          `https://graph.facebook.com/v19.0/${hashtagId}/recent_media?user_id=${USER_ID}&fields=id,media_type,media_url,permalink,caption&access_token=${ACCESS_TOKEN}`
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            const resultDiv = document.getElementById("result");
+            resultDiv.innerHTML = "";
+
+            if (!data.data || data.data.length === 0) {
+              resultDiv.innerHTML = "<p>Nenhuma postagem encontrada.</p>";
+              return;
+            }
+
+            data.data.forEach((post) => {
+              if (
+                post.media_type === "IMAGE" ||
+                post.media_type === "CAROUSEL_ALBUM" ||
+                post.media_type === "VIDEO"
+              ) {
+                const postDiv = document.createElement("div");
+                postDiv.className = "post";
+                postDiv.innerHTML = `
+                                <a href="${post.permalink}" target="_blank">
+                                    <img src="${
+                                      post.media_url
+                                    }" alt="Instagram Post">
+                                </a>
+                                <p>${post.caption || "Sem legenda"}</p>
+                            `;
+                resultDiv.appendChild(postDiv);
+              }
+            });
+          })
+          .catch((error) => console.error("Erro ao buscar postagens:", error));
+      }
+    </script>
+  </body>
+</html>
